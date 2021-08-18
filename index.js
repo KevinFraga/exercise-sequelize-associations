@@ -23,6 +23,20 @@ app.get('/patients', async (_req, res) => {
   }
 });
 
+app.get('/patients/surgeries', async (_req, res) => {
+  try {
+    const patients = await Patient.findAll({
+      include: [{ model: Surgery, as: 'surgeries', through:{ attributes: [] } }],
+    });
+
+    res.status(200).json(patients);
+  } catch (err) {
+    console.log(err.message);
+
+    res.status(500).json({ message: 'Algo deu errado' });
+  };
+});
+
 const PORT = 3000;
 
 app.listen(PORT, () => {
